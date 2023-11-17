@@ -1,49 +1,36 @@
-import pygame
-import sys
-import os
+from pygame.sprite import Group
+from pygame.sprite import Sprite
+
+from Git.settings import *
+from Git.utils import load_image
 
 pygame.init()
-
-WIDTH = 800
-HEIGHT = 600
-size = (WIDTH, HEIGHT)
 screen = pygame.display.set_mode(size)
-PLAYERONEKEY = pygame.K_a
-PLAYERTWOKEY = pygame.K_l
 players = [(20, 150), (20, 400)]
-all_sprites = pygame.sprite.Group()
-cars = pygame.sprite.Group()
-utility = pygame.sprite.Group()
-win_img = pygame.sprite.Group()
+all_sprites = Group()
+cars = Group()
+utility = Group()
+win_img = Group()
 CAR_SPEED = 0.01
 IDLE_a = -0.00001
 CLICK_a = 0.003
 
 
 def win(p_number):
-    end_window(f"race_end_{p_number}.png")
-
-
-def load_image(name):
-    fullname = os.path.join('data', name)
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    return image
+    EndWindow(f"race_end_{p_number}.png")
 
 
 def reset():
     global all_sprites, cars, utility, win_img, p1, p2, start, finish
-    all_sprites = pygame.sprite.Group()
-    cars = pygame.sprite.Group()
-    utility = pygame.sprite.Group()
-    win_img = pygame.sprite.Group()
+    all_sprites = Group()
+    cars = Group()
+    utility = Group()
+    win_img = Group()
     p1, p2 = Car(1), Car(2)
-    start, finish = start_and_finish("start"), start_and_finish("finish")
+    start, finish = StartAndFinish("start"), StartAndFinish("finish")
 
 
-class Car(pygame.sprite.Sprite):
+class Car(Sprite):
     def __init__(self, player_number):
         super().__init__(all_sprites, cars)
         self.pos = players[player_number - 1]
@@ -71,7 +58,7 @@ class Car(pygame.sprite.Sprite):
         self.vx += CLICK_a
 
 
-class start_and_finish(pygame.sprite.Sprite):
+class StartAndFinish(Sprite):
     def __init__(self, tp):
         super().__init__(all_sprites, utility)
         self.image = load_image(f"race_{tp}.png")
@@ -83,7 +70,7 @@ class start_and_finish(pygame.sprite.Sprite):
             self.rect.x, self.rect.y = 720, 0
 
 
-class end_window(pygame.sprite.Sprite):
+class EndWindow(Sprite):
     def __init__(self, image):
         super().__init__(all_sprites, win_img)
         self.image = load_image(image)
@@ -93,7 +80,7 @@ class end_window(pygame.sprite.Sprite):
 
 
 p1, p2 = Car(1), Car(2)
-start, finish = start_and_finish("start"), start_and_finish("finish")
+start, finish = StartAndFinish("start"), StartAndFinish("finish")
 
 reset()
 
@@ -104,7 +91,9 @@ def race_run(key_one, key_two):
     pygame.display.set_caption("race")
     reset()
     running = True
+
     while running:
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
