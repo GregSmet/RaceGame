@@ -1,9 +1,14 @@
+import os
+import sys
+
+import pygame
 from pygame.sprite import Group
 
-from button import *
-from race import race_run
-from settings import *
-from utils import load_image
+from data.button import Button
+from data.race import race_run
+from data.settings import (WIDTH, HEIGHT, size, size_of_button, PLAYERONEKEY, PLAYERTWOKEY, keys,
+                           background_color, background_multipliers)
+from data.utils import load_image
 
 pygame.init()
 screen = pygame.display.set_mode(size)
